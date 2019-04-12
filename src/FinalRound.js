@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -35,6 +36,14 @@ const FinalRound = () => {
       <FormGroup>
         { displayLocations() }
       </FormGroup>
+      <br />
+      <Button
+        color="primary"
+        variant="contained"
+        disabled={choice===''}
+      >
+        Submit
+      </Button>
     </FormControl>
   );
 }

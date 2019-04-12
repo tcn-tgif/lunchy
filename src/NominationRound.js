@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -42,6 +43,10 @@ const NominationRound = () => {
     return result;
   };
 
+  const isValid = () => {
+    return choices.length === 0;
+  }
+
   return (
     <FormControl>
       <FormLabel>Nominate as many as you like</FormLabel>
@@ -57,6 +62,14 @@ const NominationRound = () => {
         />
         { displayLocations() }
       </FormGroup>
+      <br />
+      <Button
+        color="primary"
+        variant="contained"
+        disabled={choices.length === 0}
+      >
+        Submit
+      </Button>
     </FormControl>
   );
 }
