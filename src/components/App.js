@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Grid, CircularProgress, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 import { FirebaseContext } from './Firebase';
 import Rounds from './Rounds';
@@ -39,6 +40,8 @@ const App = () => {
   if (initialising) return <CircularProgress className={classes.spinner} />;
 
   return (
+    <Router>
+
       <Grid container spacing={0} direction="column" className={classes.appWrapper}>
         <Grid item>
           <Topbar user={user} login={firebase.login} logout={firebase.logout} />
@@ -46,7 +49,7 @@ const App = () => {
         {user
           ? (<Grid item xs>
               <Container maxWidth="lg" className={classes.contentWrapper}>
-                <Rounds />
+                <Route path="/:lunchid" exact component={Rounds} />
               </Container>
             </Grid>
           )
@@ -57,6 +60,8 @@ const App = () => {
           )
         }
       </Grid>
+
+    </Router>
   );
 };
 

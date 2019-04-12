@@ -28,9 +28,7 @@ class Firebase {
     this.auth.signInWithRedirect(provider);
   };
 
-  logout = () => {
-    this.auth.signOut();
-  }
+  logout = () => this.auth.signOut();
 
 }
 
