@@ -1,28 +1,40 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Card, CardContent, Grid } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import theme from './theme';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+import NominationRound from './NominationRound';
+import VotingRound from './VotingRound';
+import FinalRound from './FinalRound';
+
+const App = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <NominationRound />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <VotingRound />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <FinalRound />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+  );
+};
 
 export default App;
