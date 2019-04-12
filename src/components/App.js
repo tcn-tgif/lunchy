@@ -7,7 +7,7 @@ import { FirebaseContext } from './Firebase';
 import Rounds from './Rounds';
 import Topbar from './Topbar';
 
-import patrick from './assets/food.gif';
+import patrick from '../assets/food.gif';
 
 const useStyles = makeStyles(theme => ({
   appWrapper: {

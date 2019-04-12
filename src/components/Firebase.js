@@ -36,6 +36,5 @@ class Firebase {
 
 export default Firebase;
 
-
 const FirebaseContext = React.createContext(null);
 export { FirebaseContext };
