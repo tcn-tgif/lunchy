@@ -4,21 +4,20 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Switch from '@material-ui/core/Switch';
 import { locations } from './locations'; // TODO pull from firebase
 
-const NominationRound = () => {
+const VotingRound = () => {
   const [choices, setChoices] = useState([]);
-  const [checkAll, setCheckAll] = useState(false);
 
   const checkBoxOnClick = (location) => {
-    if (checkAll) {
-      setCheckAll(false);
-    }
     if (choices.includes(location)) {
       setChoices(choices.filter(w => w !== location));
     } else {
-      setChoices(choices.concat(location));
+      if (choices.length === 2) {
+        setChoices(choices.slice(1).concat(location));
+      } else {
+        setChoices(choices.concat(location));
+      }
     }
   }
 
@@ -31,7 +30,7 @@ const NominationRound = () => {
           control={
             <Checkbox
               key={loc}
-              checked={checkAll || choices.includes(loc) ? true : false}
+              checked={choices.includes(loc) ? true : false}
               onChange={() => checkBoxOnClick(loc)}
             />
           }
@@ -44,21 +43,12 @@ const NominationRound = () => {
 
   return (
     <FormControl>
-      <FormLabel>Nominate as many as you like</FormLabel>
+      <FormLabel>Vote for up to two</FormLabel>
       <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={checkAll}
-              onChange={() => setCheckAll(!checkAll)}
-            />
-          }
-          label="Luncheon Roulette"
-        />
         { displayLocations() }
       </FormGroup>
     </FormControl>
   );
 }
 
-export default NominationRound;
+export default VotingRound;
