@@ -18,37 +18,38 @@ jobs:
 
     filters:
       branches:
-        only: master
+        only:
+          - master
 
     steps:
-      checkout
+      - checkout
 
       # Download and cache dependencies
-      restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-      run:
+      - run:
         name: Install node dependnencies
         command: npm install
 
-      save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      run:
+      - run:
         name: Run tests
         command: npm test
 
       # Build prod
-      run:
+      - run:
         name: Build production bundle
         command: npm run build
 
-      run:
-        name: Deploy Master to Firebase
-        command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+      - run:
+          name: Deploy Master to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
