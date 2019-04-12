@@ -1,2 +1,2 @@
 # lunchy
-Seize the means of producing lunch 
+Seize the means of producing lunch.
