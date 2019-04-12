@@ -1,9 +1,22 @@
-import createRound1 from './data_structures'
+import {createRound1, getCurrentDate} from './data_structures'
 
 
 it('creates round 1', () => {
-	console.log('hi')
-	let data = createRound1({}, Date.now())
+	let date = getCurrentDate()
 
-	console.log(data)
+	let data = createRound1({}, date)
+
+	expect(data).toHaveProperty(date.toString())
 })
+
+it('fails to create a round that already exists', () => {
+	let date = getCurrentDate()
+
+	let data = createRound1({}, date)
+
+	expect(() => {
+		return createRound1(data, date)
+	}).toThrow()
+})
+
+
