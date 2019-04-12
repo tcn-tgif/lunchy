@@ -20,6 +20,7 @@ const Rounds = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <Card elevation={2}>
+            <CardContent>
               <NominationRound />
             </CardContent>
           </Card>
