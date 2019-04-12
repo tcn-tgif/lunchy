@@ -9,11 +9,6 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:latest
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
     working_directory: ~/repo
 
     filters:
@@ -31,7 +26,11 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      # Install project deps
       - run: npm install
+
+      # Install functions deps
+      - run: cd functions && npm install
 
       - save_cache:
           paths:
@@ -43,9 +42,6 @@ jobs:
 
       # Build prod
       - run: npm run build
-
-      # Install functions deps
-      - run: cd functions && npm install
 
       # Deploy to firebase
       - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
