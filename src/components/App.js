@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { Grid, CircularProgress, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-
-import Rounds from './Rounds';
-
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { FirebaseContext } from './Firebase';
+import Rounds from './Rounds';
 import Topbar from './Topbar';
 
 import patrick from './assets/food.gif';
