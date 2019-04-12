@@ -18,7 +18,7 @@ const Topbar = ({ user, logout, login }) => {
             Lunchy[club]
           </Typography>
           { !user
-            ? <Button color="inherit" onCLick={login}>Login</Button>
+            ? <Button color="inherit" onClick={login}>Login</Button>
             : <Button color="inherit" onClick={logout}>Logout</Button>
           }
         </Toolbar>
