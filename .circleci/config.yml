@@ -44,4 +44,8 @@ jobs:
       # Build prod
       - run: npm run build
 
+      # Install functions deps
+      - run: cd functions && npm install
+
+      # Deploy to firebase
       - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
