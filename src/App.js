@@ -23,35 +23,34 @@ const App = () => {
     </Typography>
   );
 
-  return <Button onClick={firebase.logout}>Logout</Button>;
-
-  // return (
-  //   <ThemeProvider theme={theme}>
-  //     <Grid container spacing={2}>
-  //       <Grid item xs={12} sm={4}>
-  //         <Card elevation={2}>
-  //           <CardContent>
-  //             <NominationRound />
-  //           </CardContent>
-  //         </Card>
-  //       </Grid>
-  //       <Grid item xs={12} sm={4}>
-  //         <Card elevation={2}>
-  //           <CardContent>
-  //             <VotingRound />
-  //           </CardContent>
-  //         </Card>
-  //       </Grid>
-  //       <Grid item xs={12} sm={4}>
-  //         <Card elevation={2}>
-  //           <CardContent>
-  //             <FinalRound />
-  //           </CardContent>
-  //         </Card>
-  //       </Grid>
-  //     </Grid>
-  //   </ThemeProvider>
-  // );
+  return (
+    <ThemeProvider theme={theme}>
+      <Button onClick={firebase.logout}>Logout</Button>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <NominationRound />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <VotingRound />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card elevation={2}>
+            <CardContent>
+              <FinalRound />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+  );
 };
 
 export default App;
