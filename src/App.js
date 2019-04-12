@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import { Card, CardContent, Grid, CircularProgress, Container, Typography } from '@material-ui/core';
+import { Grid, CircularProgress, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-import NominationRound from './NominationRound';
-import VotingRound from './VotingRound';
-import FinalRound from './FinalRound';
+import Rounds from './Rounds';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FirebaseContext } from './Firebase';
@@ -49,29 +47,7 @@ const App = () => {
         {user
           ? (<Grid item xs>
               <Container maxWidth="lg" className={classes.contentWrapper}>
-                <Grid container spacing={2} alignItems="stretch">
-                  <Grid item xs={12} sm={4}>
-                    <Card elevation={2}>
-                      <CardContent>
-                        <NominationRound />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Card elevation={2}>
-                      <CardContent>
-                        <VotingRound />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Card elevation={2}>
-                      <CardContent>
-                        <FinalRound />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
+                <Rounds />
               </Container>
             </Grid>
           )

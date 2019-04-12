@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useState, useContext } from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { locations } from './locations'; // TODO pull from firebase
+
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { FirebaseContext } from './Firebase';
 
 const VotingRound = () => {
   const [choices, setChoices] = useState([]);
+  const firebase = useContext(FirebaseContext);
+  const { /*error, loading,*/ value } = useCollection(
+    firebase.firestore.collection('restaurants')
+  );
 
   const checkBoxOnClick = (location) => {
     if (choices.includes(location)) {
@@ -19,47 +23,35 @@ const VotingRound = () => {
     }
   }
 
-  const displayLocations = () => {
+  const displayRestaurants = () => {
     const result = [];
-    locations.forEach((loc) => {
-      result.push(
-        <FormControlLabel
-          key={loc}
-          control={
-            <Checkbox
-              key={loc}
-              checked={choices.includes(loc) ? true : false}
-              onChange={() => checkBoxOnClick(loc)}
-            />
-          }
-          label={loc}
-        />
-      );
-    });
+    if (value) {
+      value.docs.map(doc => doc.id).forEach((loc) => {
+        result.push(
+          <FormControlLabel
+            key={loc}
+            control={
+              <Checkbox
+                key={loc}
+                checked={choices.includes(loc) ? true : false}
+                onChange={() => checkBoxOnClick(loc)}
+                disabled={!choices.includes(loc) && choices.length === 2}
+              />
+            }
+            label={loc}
+          />
+        );
+      });
+    }
     return result;
   };
 
-  const isValid = () => {
-    return choices.length > 2;
-  }
-
   return (
-    <FormControl error={isValid()}>
+    <FormControl>
       <FormLabel>Vote for up to two</FormLabel>
       <FormGroup>
-        { displayLocations() }
+        { displayRestaurants() }
       </FormGroup>
-      <FormHelperText>
-        {isValid() ? 'select a maximum of two' : ''}
-      </FormHelperText>
-      <br />
-      <Button
-        color="primary"
-        variant="contained"
-        disabled={isValid() || choices.length === 0}
-      >
-        Submit
-      </Button>
     </FormControl>
   );
 }
