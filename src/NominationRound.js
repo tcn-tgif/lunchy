@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
+import React, { useState, useContext } from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Switch from '@material-ui/core/Switch';
-import { locations } from './locations'; // TODO pull from firebase
+import { makeStyles } from '@material-ui/styles';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { FirebaseContext } from './Firebase';
+
+
+const useStyles = makeStyles({
+  form: {
+    // minWidth: "80%",
+  },
+});
 
 const NominationRound = () => {
+  const firebase = useContext(FirebaseContext);
+  const { /*error, loading,*/ value } = useCollection(
+    firebase.firestore.collection('restaurants')
+  );
+  const classes = useStyles();
   const [choices, setChoices] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
 
@@ -25,30 +39,28 @@ const NominationRound = () => {
 
   const displayLocations = () => {
     const result = [];
-    locations.forEach((loc) => {
-      result.push(
-        <FormControlLabel
-          key={loc}
-          control={
-            <Checkbox
-              key={loc}
-              checked={checkAll || choices.includes(loc) ? true : false}
-              onChange={() => checkBoxOnClick(loc)}
-            />
-          }
-          label={loc}
-        />
-      );
-    });
+    if (value) {
+      value.docs.map(doc => doc.id).forEach((loc) => {
+        result.push(
+          <FormControlLabel
+            key={loc}
+            control={
+              <Checkbox
+                key={loc}
+                checked={checkAll || choices.includes(loc) ? true : false}
+                onChange={() => checkBoxOnClick(loc)}
+              />
+            }
+            label={loc}
+          />
+        );
+      });
+    }
     return result;
   };
 
-  const isValid = () => {
-    return choices.length === 0;
-  }
-
   return (
-    <FormControl>
+    <FormControl className={classes.form}>
       <FormLabel>Nominate as many as you like</FormLabel>
       <FormGroup>
         <FormControlLabel
@@ -62,14 +74,6 @@ const NominationRound = () => {
         />
         { displayLocations() }
       </FormGroup>
-      <br />
-      <Button
-        color="primary"
-        variant="contained"
-        disabled={choices.length === 0}
-      >
-        Submit
-      </Button>
     </FormControl>
   );
 }
