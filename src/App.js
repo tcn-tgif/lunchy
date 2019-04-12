@@ -4,6 +4,9 @@ import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import theme from './theme';
 
+import NominationRound from './NominationRound';
+import VotingRound from './VotingRound';
+
 // const useStyles = makeStyles({
 //   root: {
 //     flexGrow: 1,
@@ -32,10 +35,18 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
-          {card}
+          <Card elevation={2}>
+            <CardContent>
+              <NominationRound />
+            </CardContent>
+          </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
-          {card}
+          <Card elevation={2}>
+            <CardContent>
+              <VotingRound />
+            </CardContent>
+          </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
           {card}
