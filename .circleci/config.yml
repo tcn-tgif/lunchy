@@ -31,9 +31,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run:
-        name: Install node dependnencies
-        command: npm install
+      - run: npm install
 
       - save_cache:
           paths:
@@ -41,15 +39,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run:
-        name: Run tests
-        command: npm test
+      - run: npm test
 
       # Build prod
-      - run:
-        name: Build production bundle
-        command: npm run build
+      - run: npm run build
 
-      - run:
-          name: Deploy Master to Firebase
-          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+      - run: ./node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
