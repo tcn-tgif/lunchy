@@ -26,6 +26,11 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: 'cover',
     paddingRight: theme.spacing(7),
     paddingTop: theme.spacing(2),
+  },
+  spinner: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
   }
 }));
 
@@ -34,7 +39,7 @@ const App = () => {
   const firebase = useContext(FirebaseContext);
   const {initialising, user} = useAuthState(firebase.auth);
 
-  if (initialising) return <CircularProgress />;
+  if (initialising) return <CircularProgress className={classes.spinner} />;
 
   return (
       <Grid container spacing={0} direction="column" className={classes.appWrapper}>
