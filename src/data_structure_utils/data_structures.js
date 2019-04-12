@@ -19,7 +19,7 @@ var restaurantList = [
 	createRestaurant('painted pony'),
 ]
 
-var round1 = 'round 1: nomination'
+var round1Name = 'round 1: nomination'
 var round2 = 'round 2'
 var round3 = 'round 3'
 var round4 = 'round 4'
@@ -52,11 +52,37 @@ export function createRound1(data, date) {
 	data[date] = {
 		rounds: [
 			{
-				name: round1,
+				name: round1Name,
 				nominations: {
 				}
 			}
 		]
+	}
+
+	return data
+}
+
+export function addNomination(data, date, restaurant) {
+	if (restaurant.name == undefined) {
+		throw new Error('create restaurants with "createRestaurant"')
+	}
+       
+	if (data[date] == undefined) {
+		throw new Error('this date does not exist yet')
+	}
+
+	if (data[date].rounds[0] == undefined) {
+		throw new Error('round does not exist yet')
+	}
+       
+	if (data[date].rounds[0].name != round1Name) {
+		throw new Error('did not find the correct round')
+	}
+       
+	if (data[date].rounds[0].nominations[restaurant.name] == undefined) {
+		data[date].rounds[0].nominations[restaurant.name] = 1
+	} else {
+		data[date].rounds[0].nominations[restaurant.name]++
 	}
 
 	return data

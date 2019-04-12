@@ -1,5 +1,16 @@
-import {createRound1, getCurrentDate} from './data_structures'
+import {addNomination, createRound1, createRestaurant, getCurrentDate} from './data_structures'
 
+// showing what our data structure looks like
+var exampleData = {
+	[Date.now()]: {
+		rounds: [
+		{
+			name: 'round 1',
+			nominations: { },
+		},
+		]
+	}
+}
 
 it('creates round 1', () => {
 	let date = getCurrentDate()
@@ -19,4 +30,14 @@ it('fails to create a round that already exists', () => {
 	}).toThrow()
 })
 
+it('adds a nomination', () => {
+	let date = getCurrentDate()
 
+	let data = createRound1({}, date)
+
+	let restaurant = createRestaurant('mcdonalds')
+
+	data = addNomination(data, date, restaurant)
+
+	expect(data[date].rounds[0].nominations[restaurant.name]).toEqual(1)
+})
