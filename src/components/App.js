@@ -2,9 +2,10 @@ import React, { useContext } from 'react';
 import { Grid, CircularProgress, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { FirebaseContext } from './Firebase';
+import Landing from './Landing';
 import Rounds from './Rounds';
 import Topbar from './Topbar';
 
@@ -47,9 +48,11 @@ const App = () => {
           <Topbar user={user} login={firebase.login} logout={firebase.logout} />
         </Grid>
         {user
-          ? (<Grid item xs>
+            ? (
+            <Grid item xs>
               <Container maxWidth="lg" className={classes.contentWrapper}>
-                <Route path="/:lunchid" exact component={Rounds} />
+                <Route path="/:lunchId" exact component={Rounds} />
+                <Route path="/" exact component={Landing} />
               </Container>
             </Grid>
           )

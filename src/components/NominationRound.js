@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -17,14 +17,30 @@ const useStyles = makeStyles({
   },
 });
 
-const NominationRound = () => {
+const NominationRound = (props) => {
   const firebase = useContext(FirebaseContext);
-  const { /*error, loading,*/ value } = useCollection(
+  let { /*error, loading,*/ value } = useCollection(
     firebase.firestore.collection('restaurants')
   );
   const classes = useStyles();
   const [choices, setChoices] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
+
+  useEffect(() => {
+    if (checkAll) {
+      firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
+        [props.lunchId]: {
+          round1: value.docs.map(doc => doc.id)
+        }
+      });
+    } else {
+      firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
+        [props.lunchId]: {
+          round1: choices
+        }
+      });
+    }
+  }, [choices, checkAll]);
 
   const checkBoxOnClick = (location) => {
     if (checkAll) {
@@ -67,7 +83,7 @@ const NominationRound = () => {
           control={
             <Switch
               checked={checkAll}
-              onChange={() => setCheckAll(!checkAll)}
+              onChange={() => setCheckAll(!checkAll) }
             />
           }
           label="Luncheon Roulette"

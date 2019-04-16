@@ -12,14 +12,16 @@ const useStyles = makeStyles({
   },
 });
 
-const App = () => {
+const App = (props) => {
   const classes = useStyles();
+  console.log(props.match.params);
+  // TODO: check lunchid
   return (
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <Card elevation={2}>
             <CardContent className={classes.card}>
-              <NominationRound />
+              <NominationRound lunchId={props.match.params.lunchId} />
             </CardContent>
           </Card>
         </Grid>
