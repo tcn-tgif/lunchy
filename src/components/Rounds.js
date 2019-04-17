@@ -28,14 +28,14 @@ const App = (props) => {
         <Grid item xs={12} sm={4}>
           <Card elevation={2}>
             <CardContent className={classes.card}>
-              <VotingRound />
+              <VotingRound lunchId={props.match.params.lunchId} />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
           <Card elevation={2}>
             <CardContent className={classes.card}>
-              <FinalRound />
+              <FinalRound lunchId={props.match.params.lunchId} />
             </CardContent>
           </Card>
         </Grid>

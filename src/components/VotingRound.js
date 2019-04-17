@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -8,12 +8,31 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { FirebaseContext } from './Firebase';
 
-const VotingRound = () => {
+const VotingRound = (props) => {
   const [choices, setChoices] = useState([]);
   const firebase = useContext(FirebaseContext);
   const { /*error, loading,*/ value } = useCollection(
     firebase.firestore.collection('restaurants')
   );
+
+  useEffect(() => {
+    updateFirebase();
+  }, [choices]);
+
+  const updateFirebase = async () => {
+    const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
+    userRef.get().then(doc => {
+      console.log(doc);
+      if (doc) {
+        firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
+          [props.lunchId]: {
+            round2: choices,
+            ...doc.data()[props.lunchId],
+          }
+        });
+      }
+    }).catch((err) => console.error('oops', err));
+  }
 
   const checkBoxOnClick = (location) => {
     if (choices.includes(location)) {
