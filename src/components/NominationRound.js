@@ -33,7 +33,7 @@ const NominationRound = (props) => {
           round1: value.docs.map(doc => doc.id)
         }
       });
-    } else {
+    } else if (choices.length) {
       firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
         [props.lunchId]: {
           round1: choices

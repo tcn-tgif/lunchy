@@ -16,7 +16,9 @@ const FinalRound = (props) => {
   );
 
   useEffect(() => {
-    updateFirebase();
+    if (choice !== '') {
+      updateFirebase();
+    }
   }, [choice]);
 
   const updateFirebase = async () => {
