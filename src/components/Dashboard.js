@@ -3,9 +3,6 @@ import { Button, Card, CardContent, Grid, Paper, Typography } from '@material-ui
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
-  card: {
-    // display: "flex",
-  },
   author: {
     textAlign: "right",
     marginBotton: 12,
@@ -28,7 +25,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Landing = (props) => {
+const Dashboard = (props) => {
   const classes = useStyles();
   console.log(props.match.params);
   // TODO: check lunchid
@@ -60,4 +57,4 @@ const Landing = (props) => {
   );
 };
 
-export default Landing;
+export default Dashboard;

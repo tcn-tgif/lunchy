@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/styles';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { FirebaseContext } from './Firebase';
+import { FirebaseContext } from '../Firebase';
 
 
 const useStyles = makeStyles({

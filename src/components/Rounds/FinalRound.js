@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { FirebaseContext } from './Firebase';
+import { FirebaseContext } from '../Firebase';
 
 const FinalRound = (props) => {
   const [choice, setChoice] = useState('');

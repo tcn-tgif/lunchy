@@ -5,9 +5,9 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { FirebaseContext } from './Firebase';
-import Landing from './Landing';
 import Rounds from './Rounds';
 import Topbar from './Topbar';
+import Dashboard from './Dashboard';
 
 import patrick from '../assets/food.gif';
 
@@ -48,11 +48,11 @@ const App = () => {
           <Topbar user={user} login={firebase.login} logout={firebase.logout} />
         </Grid>
         {user
-            ? (
+          ? (
             <Grid item xs>
               <Container maxWidth="lg" className={classes.contentWrapper}>
-                <Route path="/:lunchId" exact component={Rounds} />
-                <Route path="/" exact component={Landing} />
+                <Route path="/:lunchid" exact component={Rounds} />
+                <Route path="/" exact component={Dashboard} />
               </Container>
             </Grid>
           )
