@@ -14,6 +14,7 @@ import patrick from '../assets/food.gif';
 const useStyles = makeStyles(theme => ({
   appWrapper: {
     minHeight: '100vh',
+    overflowX: 'hidden',
   },
   contentWrapper: {
     paddingTop: theme.spacing(2),
