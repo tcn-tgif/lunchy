@@ -4,18 +4,32 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Switch from '@material-ui/core/Switch';
+import { makeStyles } from '@material-ui/styles';
 
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { FirebaseContext } from './Firebase';
+import { FirebaseContext } from '../Firebase';
 
-const VotingRound = () => {
-  const [choices, setChoices] = useState([]);
+
+const useStyles = makeStyles({
+  form: {
+    // minWidth: "80%",
+  },
+});
+
+const NominationRound = () => {
   const firebase = useContext(FirebaseContext);
   const { /*error, loading,*/ value } = useCollection(
     firebase.firestore.collection('restaurants')
   );
+  const classes = useStyles();
+  const [choices, setChoices] = useState([]);
+  const [checkAll, setCheckAll] = useState(false);
 
   const checkBoxOnClick = (location) => {
+    if (checkAll) {
+      setCheckAll(false);
+    }
     if (choices.includes(location)) {
       setChoices(choices.filter(w => w !== location));
     } else {
@@ -23,7 +37,7 @@ const VotingRound = () => {
     }
   }
 
-  const displayRestaurants = () => {
+  const displayLocations = () => {
     const result = [];
     if (value) {
       value.docs.map(doc => doc.id).forEach((loc) => {
@@ -33,9 +47,8 @@ const VotingRound = () => {
             control={
               <Checkbox
                 key={loc}
-                checked={choices.includes(loc) ? true : false}
+                checked={checkAll || choices.includes(loc) ? true : false}
                 onChange={() => checkBoxOnClick(loc)}
-                disabled={!choices.includes(loc) && choices.length === 2}
               />
             }
             label={loc}
@@ -47,13 +60,22 @@ const VotingRound = () => {
   };
 
   return (
-    <FormControl>
-      <FormLabel>Vote for up to two</FormLabel>
+    <FormControl className={classes.form}>
+      <FormLabel>Nominate as many as you like</FormLabel>
       <FormGroup>
-        { displayRestaurants() }
+        <FormControlLabel
+          control={
+            <Switch
+              checked={checkAll}
+              onChange={() => setCheckAll(!checkAll)}
+            />
+          }
+          label="Luncheon Roulette"
+        />
+        { displayLocations() }
       </FormGroup>
     </FormControl>
   );
 }
 
-export default VotingRound;
+export default NominationRound;
