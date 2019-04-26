@@ -1,18 +1,10 @@
 service cloud.firestore {
   match /databases/{database}/documents {
-  	function isTCN() {
-    	return request.auth.token.email.matches('.*@(tcnbroadcasting|tcnp3)[.]com');
+    function isTCN() {
+      return request.auth.token.email.matches('.*@(tcnbroadcasting|tcnp3)[.]com');
     }
     match /{document=**} {
-      allow read: if isTCN();
+      allow read, write: if isTCN();
     }
   }
 }
-
-  # round writing under email
-  # match /databases/lunches/documents {
-		# match /{lunchid}/rounds/{round}/{email} {
-  #     allow write, delete: if request.auth.token.email == email;
-  #     allow create: if request.auth.token.email != null;
-  #   }
-  # }
