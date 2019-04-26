@@ -13,8 +13,8 @@ service cloud.firestore {
     }
 
     match /lunches/{lunch} {
-      allow write: if isAdmin();
-      match /rounds/{voteid} {
+      allow create: if isAdmin();
+      match /rounds/{number}/{voteid} {
         allow write: if isAdmin() || request.auth.token.email == voteid;
       }
     }
