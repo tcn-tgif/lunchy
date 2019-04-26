@@ -7,6 +7,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
+import { reduce } from 'lodash'
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { FirebaseContext } from '../Firebase';
@@ -28,7 +29,7 @@ const VotingRound = (props) => {
   const [choices, setChoices] = useState([]);
   const firebase = useContext(FirebaseContext);
   const { /*error, loading,*/ value } = useCollection(
-    firebase.firestore.collection('restaurants')
+    firebase.firestore.collection('lunches').doc(props.lunchId).collection('rounds')
   );
 
   const updateFirebase = () => {
@@ -47,23 +48,31 @@ const VotingRound = (props) => {
 
   const displayRestaurants = () => {
     const result = [];
-    if (value) {
-      value.docs.map(doc => doc.id).forEach((loc) => {
-        result.push(
-          <FormControlLabel
-            key={loc}
-            control={
-              <Checkbox
-                key={loc}
-                checked={choices.includes(loc) ? true : false}
-                onChange={() => checkBoxOnClick(loc)}
-                disabled={!choices.includes(loc) && choices.length === 2}
-              />
-            }
-            label={loc}
-          />
-        );
-      });
+    if (value && value.docs.find(doc => doc.id)) {
+      reduce(
+        value.docs.find(doc => doc.id).data(),
+        (total, name) => {
+          if (!(name in total)) {
+            return total.concat(name)
+          }
+          return total
+        }, []
+      ).forEach((loc) => {
+          result.push(
+            <FormControlLabel
+              key={loc}
+              control={
+                <Checkbox
+                  key={loc}
+                  checked={choices.includes(loc) ? true : false}
+                  onChange={() => checkBoxOnClick(loc)}
+                  disabled={!choices.includes(loc) && choices.length === 2}
+                />
+              }
+              label={loc}
+            />
+          );
+        });
     }
     return result;
   };
