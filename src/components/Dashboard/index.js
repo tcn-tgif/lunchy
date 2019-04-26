@@ -47,7 +47,7 @@ const Dashboard = () => {
       .limit(5)
   );
 
-  // window.firebase = firebase;
+  window.firebase = firebase;
   // console.log(activeLunches);
 
   const createLunch = () => {
@@ -56,16 +56,11 @@ const Dashboard = () => {
       createdAt: firebase.serverTimestamp(),
       createdBy: firebase.auth.currentUser.email,
       roundOneDuration: 10 * 60 * 1000,
-      rounds: [
-        {},
-        {},
-        {},
-      ],
     }
 
     firebase.firestore.collection('lunches').add(newLunch)
-    .then(res => { console.log('success created: ', res)})
-    .catch(err => { console.log('ERROR creating lunch! ', err); });
+      .then(res => { console.log('success created: ', res)})
+      .catch(err => { console.log('ERROR creating lunch! ', err); });
   }
 
   return (
