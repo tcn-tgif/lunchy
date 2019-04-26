@@ -3,8 +3,15 @@ service cloud.firestore {
     function isTCN() {
       return request.auth.token.email.matches('.*@(tcnbroadcasting|tcnp3)[.]com');
     }
-    match /{document=**} {
-      allow read, write: if isTCN();
+    function isAdmin() {
+      return request.auth.token.email.matches('(gunnar[.]gabrielson|brady[.]killeen)@(tcnbroadcasting|tcnp3)[.]com')
+    }
+    match /lunches {
+      allow write: if isAdmin();
+      allow read: if isTCN();
+      match /{lunch}/rounds/{voteid} {
+        allow read, write: if isAdmin || request.auth.token.email == voteid;
+      }
     }
   }
 }
