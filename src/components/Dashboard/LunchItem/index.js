@@ -1,10 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
+// import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import { Grid } from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/CheckCircle';
+import { Grid, Button } from '@material-ui/core';
+// import CheckIcon from '@material-ui/icons/CheckCircle';
+import Goto from '../../common/Goto';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -35,29 +37,33 @@ const useStyles = makeStyles(theme => ({
 const LunchItem = props => {
   const classes = useStyles();
 
-  return (
-    <Card className={classes.card}>
-      <Grid container spacing={2}>
-        <Grid item xs>
-          <div className={classes.details}>
-            <Typography component="h5" variant="h5" className={classes.title}>
-              <CheckIcon className={classes.icon} /> {props.winner}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              Won With 22 of 33 Votes.
-            </Typography>
-          </div>
-        </Grid>
+  console.log(props);
 
-        <Grid item xs>
-          <CardMedia
-            className={classes.cover}
-            image="https://cdn0.wideopeneats.com/wp-content/uploads/2017/08/arbys-bourbon-menu-items.png"
-            title="Arbys"
-          />
+  return (
+      <Card className={classes.card}>
+        <Grid container spacing={2}>
+          <Grid item xs>
+            <div className={classes.details}>
+              <Typography component="h6" variant="h6" className={classes.title}>
+                {/* <CheckIcon className={classes.icon} /> {props.winner} */}
+                <Link to={props.id}>Lunch: {props.id}</Link> <br />
+              </Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  Created At: {(new Date(props.lunch.createdAt.seconds * 1000).toLocaleString())}
+                  {/* Won With 22 of 33 Votes. */}
+                </Typography>
+            </div>
+          </Grid>
+
+          {/* <Grid item xs>
+            <CardMedia
+              className={classes.cover}
+              image="https://cdn0.wideopeneats.com/wp-content/uploads/2017/08/arbys-bourbon-menu-items.png"
+              title="Arbys"
+            />
+          </Grid> */}
         </Grid>
-      </Grid>
-    </Card>
+      </Card>
   );
 }
 

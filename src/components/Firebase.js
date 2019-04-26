@@ -29,6 +29,8 @@ class Firebase {
   };
 
   logout = () => this.auth.signOut();
+
+  serverTimestamp = () => app.firestore.FieldValue.serverTimestamp();
 }
 
 export default Firebase;

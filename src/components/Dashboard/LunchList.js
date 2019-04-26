@@ -1,40 +1,32 @@
 import React from 'react';
-// import { FirebaseContext } from './Firebase';
-// import { useCollection } from 'react-firebase-hooks/firestore';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider, CircularProgress } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import LunchItem from './LunchItem';
 
-/*
-  1. List lunches
-  2. Start new Lunch
-  3. Post to Slack
-*/
 
 const LunchList = (props) => {
-  // const firebase = useContext(FirebaseContext);
-  // const { /*error, loading,*/ value } = useCollection(
-  //   firebase.firestore.collection('lunches')
-  // );
-  //   console.log('value: ', value);
+   const showLunches = (lunches, title) => lunches.docs.length > 0
+    ? lunches.docs.map(lunch => {
+      const data = lunch.data();
+      return data.createdAt
+        ? <LunchItem lunch={lunch.data()} id={lunch.id} key={lunch.id} />
+        : null;
+    })
+    : <Typography variant="subtitle2">There are no {title}!</Typography>;
+
+
   return (
     <React.Fragment>
       <Typography gutterBottom variant="h5">{props.title}</Typography>
       <Divider />
-      <LunchItem winner="Arbys" />
+      <Box mt={2}>
+        {props.lunches
+          ? showLunches(props.lunches, props.title)
+          : <CircularProgress size={18} style={{ marginTop: '8px' }} />
+        }
+      </Box>
     </React.Fragment>
   )
-  // return (
-  // <div>
-  //   <Typography variant="h4">Dashboard</Typography>
-  //   <Grid container spacing={3}>
-  //     <Grid item sm={6}>
-  //       {value && value.docs.map(doc => (
-  //         <Card><pre>{JSON.stringify(doc.data(), null, 2)}</pre></Card>
-  //       ))}
-  //     </Grid>
-  //   </Grid>
-  // </div>
-  // )
 }
 
 export default LunchList;

@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Card, CardContent, Grid, Typography, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { FirebaseContext } from '../Firebase';
+
 import LunchList from './LunchList';
 
 const useStyles = makeStyles(theme => ({
@@ -22,10 +26,45 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Dashboard = (props) => {
+const LUNCH_STATUS = {
+  PENDING: 'pending',
+  ACTIVE: 'active',
+  COMPLETE: 'complete',
+}
+
+const Dashboard = () => {
   const classes = useStyles();
-  console.log(props.match.params);
-  // TODO: check lunchid
+  const firebase = useContext(FirebaseContext);
+  const {value: activeLunches } = useCollection(
+    firebase.firestore.collection('lunches')
+      .where('status', '==', LUNCH_STATUS.ACTIVE)
+      // .orderBy('createdAt') // Can't seem to get this to work.
+  );
+
+  const {value: recentLunches } = useCollection(
+    firebase.firestore.collection('lunches')
+      .where('status', '==', LUNCH_STATUS.COMPLETE)
+      .limit(5)
+  );
+
+  // window.firebase = firebase;
+  // console.log(activeLunches);
+
+  const createLunch = () => {
+    const newLunch = {
+      status: LUNCH_STATUS.ACTIVE,
+      createdAt: firebase.serverTimestamp(),
+      createdBy: firebase.auth.currentUser.email,
+      rounds: [
+        {},
+        {},
+        {},
+      ],
+    }
+
+    firebase.firestore.collection('lunches').add(newLunch);
+  }
+
   return (
       <Grid container spacing={6} direction="column">
         <Grid item xs={12}>
@@ -45,7 +84,7 @@ const Dashboard = (props) => {
               </Typography>
             </CardContent>
             <Toolbar className={classes.buttonSpread}>
-              <Button variant="contained" color="primary">Create</Button>
+              <Button variant="contained" color="primary" onClick={createLunch}>Create</Button>
               <Button variant="contained" color="secondary">Join</Button>
             </Toolbar>
           </Card>
@@ -53,10 +92,10 @@ const Dashboard = (props) => {
 
         <Grid item container spacing={6}>
           <Grid item sm={6}>
-            <LunchList title="Active Lunches" />
+            <LunchList title="Active Lunches" lunches={activeLunches} />
           </Grid>
           <Grid item sm={6}>
-            <LunchList title="Past Lunches" />
+            <LunchList title="Recent Lunches" lunches={recentLunches} />
           </Grid>
         </Grid>
       </Grid>
