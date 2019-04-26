@@ -16,23 +16,24 @@ const VotingRound = (props) => {
   );
 
   useEffect(() => {
-    updateFirebase();
-  }, [choices]);
+    const updateFirebase = async (choices) => {
+      const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
+      userRef.get().then(doc => {
+        console.log(doc);
+        if (doc) {
+          firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
+            [props.lunchId]: {
+              round2: choices,
+              ...doc.data()[props.lunchId],
+            }
+          });
+        }
+      }).catch((err) => console.error('oops', err));
+    }
 
-  const updateFirebase = async () => {
-    const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
-    userRef.get().then(doc => {
-      console.log(doc);
-      if (doc) {
-        firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
-          [props.lunchId]: {
-            round2: choices,
-            ...doc.data()[props.lunchId],
-          }
-        });
-      }
-    }).catch((err) => console.error('oops', err));
-  }
+    updateFirebase();
+  }, [choices, firebase.auth.currentUser.email, firebase.firestore, props.lunchId]);
+
 
   const checkBoxOnClick = (location) => {
     if (choices.includes(location)) {

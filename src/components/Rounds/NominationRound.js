@@ -40,7 +40,7 @@ const NominationRound = (props) => {
         }
       });
     }
-  }, [choices, checkAll]);
+  }, [choices, checkAll, firebase.firestore, firebase.auth.currentUser.email, props.lunchId, value.docs]);
 
   const checkBoxOnClick = (location) => {
     if (checkAll) {

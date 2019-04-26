@@ -16,24 +16,24 @@ const FinalRound = (props) => {
   );
 
   useEffect(() => {
+    const updateFirebase = async () => {
+      const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
+      userRef.get().then(doc => {
+        if (doc) {
+          firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
+            [props.lunchId]: {
+              round3: choice,
+              ...doc.data()[props.lunchId],
+            }
+          });
+        }
+      }).catch((err) => console.error('oops', err));
+    }
     if (choice !== '') {
       updateFirebase();
     }
-  }, [choice]);
+  }, [choice, firebase.auth.currentUser.email, firebase.firestore, props.lunchId]);
 
-  const updateFirebase = async () => {
-    const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
-    userRef.get().then(doc => {
-      if (doc) {
-        firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
-          [props.lunchId]: {
-            round3: choice,
-            ...doc.data()[props.lunchId],
-          }
-        });
-      }
-    }).catch((err) => console.error('oops', err));
-  }
 
   const displayLocations = () => {
     const result = [];
