@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 // import CheckIcon from '@material-ui/icons/CheckCircle';
 import { Link } from 'react-router-dom';
+import Countdown from 'react-countdown-now';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -35,21 +36,25 @@ const useStyles = makeStyles(theme => ({
 
 const LunchItem = props => {
   const classes = useStyles();
+  const createdAt = props.lunch.createdAt.seconds * 1000;
 
-  console.log(props);
+  const { roundOneDuration } = props.lunch;
+  const roundTwoDuration = roundOneDuration / 2;
+  const roundThreeDuration = roundTwoDuration / 2;
+  const endTime = createdAt + roundOneDuration + roundTwoDuration + roundThreeDuration;
 
   return (
       <Card className={classes.card}>
         <Grid container spacing={2}>
           <Grid item xs>
             <div className={classes.details}>
-              <Typography component="h6" variant="h6" className={classes.title}>
+              <Typography component="div" variant="subtitle1" className={classes.title}>
                 {/* <CheckIcon className={classes.icon} /> {props.winner} */}
                 <Link to={props.id}>Lunch: {props.id}</Link> <br />
               </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  Created At: {(new Date(props.lunch.createdAt.seconds * 1000).toLocaleString())}
-                  {/* Won With 22 of 33 Votes. */}
+                <Typography variant="body2" color="textSecondary">
+                  Created At: {(new Date(createdAt)).toLocaleString()}<br />
+                  Time Left: <Countdown date={new Date(endTime)} />
                 </Typography>
             </div>
           </Grid>
