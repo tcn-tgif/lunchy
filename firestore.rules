@@ -3,14 +3,19 @@ service cloud.firestore {
     function isTCN() {
       return request.auth.token.email.matches('.*@(tcnbroadcasting|tcnp3)[.]com');
     }
+
     function isAdmin() {
       return request.auth.token.email.matches('(gunnar[.]gabrielson|brady[.]killeen)@(tcnbroadcasting|tcnp3)[.]com')
     }
-    match /lunches {
-      allow write: if isAdmin();
+
+    match /{document=**} {
       allow read: if isTCN();
-      match /{lunch}/rounds/{voteid} {
-        allow read, write: if isAdmin || request.auth.token.email == voteid;
+    }
+
+    match /lunches/{lunch} {
+      allow write: if isAdmin();
+      match /rounds/{voteid} {
+        allow write: if isAdmin() || request.auth.token.email == voteid;
       }
     }
   }

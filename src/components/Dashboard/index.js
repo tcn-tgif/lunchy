@@ -55,6 +55,7 @@ const Dashboard = () => {
       status: LUNCH_STATUS.ACTIVE,
       createdAt: firebase.serverTimestamp(),
       createdBy: firebase.auth.currentUser.email,
+      roundOneDuration: 10 * 60 * 1000,
       rounds: [
         {},
         {},
@@ -62,7 +63,9 @@ const Dashboard = () => {
       ],
     }
 
-    firebase.firestore.collection('lunches').add(newLunch);
+    firebase.firestore.collection('lunches').add(newLunch)
+    .then(res => { console.log('success created: ', res)})
+    .catch(err => { console.log('ERROR creating lunch! ', err); });
   }
 
   return (
