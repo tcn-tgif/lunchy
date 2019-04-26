@@ -52,7 +52,7 @@ const App = () => {
           ? (
             <Grid item xs>
               <Container maxWidth="lg" className={classes.contentWrapper}>
-                <Route path="/:lunchid" exact component={Rounds} />
+                <Route path="/:lunchId" exact component={Rounds} />
                 <Route path="/" exact component={Dashboard} />
               </Container>
             </Grid>
