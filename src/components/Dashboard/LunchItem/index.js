@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 // import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 // import CheckIcon from '@material-ui/icons/CheckCircle';
-import Goto from '../../common/Goto';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
