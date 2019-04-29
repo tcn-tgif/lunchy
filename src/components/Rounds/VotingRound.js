@@ -1,39 +1,42 @@
-import React, { useState, useContext, useEffect } from 'react';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import React, { useState, useContext } from 'react';
+import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/styles';
+import { reduce } from 'lodash'
 
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { FirebaseContext } from '../Firebase';
 
+const useStyles = makeStyles({
+  form: {
+    width: '100%',
+  },
+  buttonContainer: {
+    textAlign: 'center',
+  },
+  button: {
+    maxWidth: '80%',
+  }
+});
+
 const VotingRound = (props) => {
+  const classes = useStyles();
   const [choices, setChoices] = useState([]);
   const firebase = useContext(FirebaseContext);
   const { /*error, loading,*/ value } = useCollection(
-    firebase.firestore.collection('restaurants')
+    firebase.firestore.collection('lunches').doc(props.lunchId).collection('rounds')
   );
 
-  useEffect(() => {
-    const updateFirebase = async (choices) => {
-      const userRef = await firebase.firestore.collection('users').doc(firebase.auth.currentUser.email);
-      userRef.get().then(doc => {
-        console.log(doc);
-        if (doc) {
-          firebase.firestore.collection('users').doc(firebase.auth.currentUser.email).set({
-            [props.lunchId]: {
-              round2: choices,
-              ...doc.data()[props.lunchId],
-            }
-          });
-        }
-      }).catch((err) => console.error('oops', err));
-    }
-
-    updateFirebase();
-  }, [choices, firebase.auth.currentUser.email, firebase.firestore, props.lunchId]);
-
+  const updateFirebase = () => {
+    firebase.firestore.collection('lunches').doc(props.lunchId).collection('rounds').doc('2').set({
+      [firebase.auth.currentUser.email]: choices
+    })
+  };
 
   const checkBoxOnClick = (location) => {
     if (choices.includes(location)) {
@@ -45,34 +48,57 @@ const VotingRound = (props) => {
 
   const displayRestaurants = () => {
     const result = [];
-    if (value) {
-      value.docs.map(doc => doc.id).forEach((loc) => {
-        result.push(
-          <FormControlLabel
-            key={loc}
-            control={
-              <Checkbox
-                key={loc}
-                checked={choices.includes(loc) ? true : false}
-                onChange={() => checkBoxOnClick(loc)}
-                disabled={!choices.includes(loc) && choices.length === 2}
-              />
-            }
-            label={loc}
-          />
-        );
-      });
+    if (value && value.docs.find(doc => doc.id)) {
+      reduce(
+        value.docs.find(doc => doc.id).data(),
+        (total, name) => {
+          if (!(name in total)) {
+            return total.concat(name)
+          }
+          return total
+        }, []
+      ).forEach((loc) => {
+          result.push(
+            <FormControlLabel
+              key={loc}
+              control={
+                <Checkbox
+                  key={loc}
+                  checked={choices.includes(loc) ? true : false}
+                  onChange={() => checkBoxOnClick(loc)}
+                  disabled={!choices.includes(loc) && choices.length === 2}
+                />
+              }
+              label={loc}
+            />
+          );
+        });
     }
     return result;
   };
 
   return (
-    <FormControl>
-      <FormLabel>Vote for up to two</FormLabel>
-      <FormGroup>
-        { displayRestaurants() }
-      </FormGroup>
-    </FormControl>
+    <Grid>
+      <Grid item>
+        <FormControl className={classes.form}>
+          <FormLabel>Vote for up to two</FormLabel>
+          <FormGroup>
+            { displayRestaurants() }
+          </FormGroup>
+        </FormControl>
+      </Grid>
+      <Grid className={classes.buttonContainer} item>
+        <br />
+        <Button
+          className={classes.button}
+          variant='contained'
+          color='primary'
+          onClick={updateFirebase}
+        >
+          Save
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 
